@@ -1,21 +1,20 @@
-const { log, error } = require("../utils");
-
-const schema = require("./schema.json");
+const { error, ajvError } = require("../utils");
+const defaultConfig = require("./default.json");
+const validateConfig = require("./ajv");
 
 const { cosmiconfigSync } = require("cosmiconfig");
-const Ajv = require("ajv").default;
 
 const configLoader = cosmiconfigSync("tool");
-
-const ajv = new Ajv();
 
 module.exports = function getConfig() {
   const result = configLoader.search(process.cwd());
 
-  if (result) {
-    return result.config;
-  } else {
-    error("No tool configuration found in package.json");
-    return { port: 1234 };
+  if (!result) {
+    error("No configuration found for tool");
+    return defaultConfig;
   }
+
+  if (!validateConfig(result.config)) process.exit(1);
+
+  return result.config;
 };
