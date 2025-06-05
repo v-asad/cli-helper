@@ -1,10 +1,12 @@
 #!/usr/bin/env node
 const arg = require("arg");
 
-const { usage, error } = require("../src/utils");
+const { usage } = require("../src/utils");
 
 const getConfig = require("../src/config/config-mgr");
 const start = require("../src/commands/start");
+
+const logger = require("../src/logger")("bin");
 
 try {
   const args = arg({
@@ -16,6 +18,6 @@ try {
     start(config);
   }
 } catch (err) {
-  error("[Error]: " + err.message);
+  logger.error("[Error]: " + err.message);
   usage();
 }

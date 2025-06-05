@@ -1,6 +1,7 @@
-const { error, ajvError } = require("../utils");
 const defaultConfig = require("./default.json");
 const validateConfig = require("./ajv");
+
+const logger = require("../logger")("config:mgr");
 
 const { cosmiconfigSync } = require("cosmiconfig");
 
@@ -10,7 +11,9 @@ module.exports = function getConfig() {
   const result = configLoader.search(process.cwd());
 
   if (!result) {
-    error("No configuration found for tool");
+    logger.warning(
+      "No configuration found for tool. Using default configuration."
+    );
     return defaultConfig;
   }
 

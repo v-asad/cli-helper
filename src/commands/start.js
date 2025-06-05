@@ -1,14 +1,16 @@
-const { log, error, success } = require("../utils");
+const { error, success } = require("../utils");
+
+const logger = require("../logger")("command:start");
 
 module.exports = function start(config) {
   try {
-    log("Starting the app on port:", config.port);
+    logger.highlight("Starting the app on port:", config.port);
 
     // Simulate starting the app
     setTimeout(() => {
-      success("App started successfully on port " + config.port);
+      logger.success("App started successfully on port " + config.port);
     }, 1000);
   } catch (err) {
-    error("[Error]: " + err.message);
+    logger.error(err.message);
   }
 };
